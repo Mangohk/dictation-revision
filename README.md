@@ -9,6 +9,10 @@ English Revision Studio — P5 dictation revision hub and read-aloud pages.
 | `/` | Dictation hub (lists linked revision pages) |
 | `/dictations/1/` | Dictation 1 — Broadcast Read-Aloud |
 
+# Page
+https://mangohk.github.io/dictation-revision/
+
+
 ## Develop
 
 ```bash
