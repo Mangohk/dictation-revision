@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>English Revision Studio · Dictation Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="/">
+          <div class="brand__mark" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"
+              />
+            </svg>
+          </div>
+          <div>
+            <div class="brand__title-row">
+              <h1 class="brand__title">English Revision Studio</h1>
+              <span class="pill">P5 Term 1</span>
+            </div>
+            <p class="brand__subtitle">Dictation revision hub</p>
+          </div>
+        </a>
+      </div>
+    </header>
+
+    <main class="site-main">
+      <section class="hub-hero">
+        <h1>Choose a dictation to revise</h1>
+        <p>
+          Open a broadcast read-aloud session. Each dictation keeps the same Revision Studio
+          layout: vocabulary, passage tracking, and sentence practice.
+        </p>
+      </section>
+
+      <section aria-label="Available dictations">
+        <div class="dictation-grid" id="dictationGrid"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        Designed for Hong Kong Primary 5 EFL English Dictation Revision · English Revision Studio
+      </div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

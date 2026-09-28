@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>P5 English Dictation 1 · Read Aloud Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="/">
+          <div class="brand__mark" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"
+              />
+            </svg>
+          </div>
+          <div>
+            <div class="brand__title-row">
+              <p class="brand__title">English Revision Studio</p>
+              <span class="pill">P5 Term 1</span>
+            </div>
+            <p class="brand__subtitle" id="headerSubtitle">Dictation 1 · Broadcast Read-Aloud</p>
+          </div>
+        </a>
+
+        <div id="statusBadge" class="status-badge" aria-live="polite">
+          <span class="status-dot" id="statusDot"></span>
+          <span id="statusText">Ready to read</span>
+          <div id="soundWave" class="sound-wave" aria-hidden="true">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="site-main review-stack">
+      <a class="back-link" href="/">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        All dictations
+      </a>
+
+      <section class="card panel">
+        <div class="controls-row">
+          <div class="field">
+            <label for="voiceSelect">Broadcaster Voice</label>
+            <div class="select-wrap">
+              <select id="voiceSelect">
+                <option value="">Searching for natural voices...</option>
+              </select>
+              <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+
+          <div>
+            <span class="rate-label">Speaking Pace</span>
+            <div class="rate-group" role="group" aria-label="Speaking pace">
+              <button type="button" data-rate="0.6" class="rate-btn">Slow (0.6x)</button>
+              <button type="button" data-rate="0.72" class="rate-btn">Relaxed (0.72x)</button>
+              <button type="button" data-rate="0.85" class="rate-btn active-rate">Broadcast (0.85x)</button>
+              <button type="button" data-rate="1.0" class="rate-btn">Standard (1.0x)</button>
+            </div>
+          </div>
+
+          <button id="globalStopBtn" type="button" class="btn btn-ghost">
+            <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"></rect></svg>
+            Stop Reading
+          </button>
+        </div>
+
+        <div class="tips-row">
+          <strong class="tip-label">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            Study Tip:
+          </strong>
+          <span>Tap any word to hear isolated pronunciation.</span>
+          <span>Press <strong>Listen</strong> to follow along with the glowing highlighter.</span>
+        </div>
+      </section>
+
+      <section class="card panel">
+        <div class="panel__header">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem">
+              <span class="part-badge part-badge--a">Part A</span>
+              <h2>Vocabulary Words &amp; Phrases</h2>
+            </div>
+            <p>10 target items for Dictation 1</p>
+          </div>
+          <button id="listenAllBtn" type="button" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+            Listen to All (1–10)
+          </button>
+        </div>
+        <div class="vocab-grid" id="vocabContainer"></div>
+      </section>
+
+      <section class="card panel">
+        <div class="panel__header">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem">
+              <span class="part-badge part-badge--b">Part B</span>
+              <h2>Paragraphs</h2>
+            </div>
+            <p>Full passage revision with synchronous word tracking</p>
+          </div>
+          <button id="listenPassageBtn" type="button" class="btn btn-success">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+            Listen to Passage
+          </button>
+        </div>
+
+        <div class="passage-box">
+          <p id="paragraphDisplay"></p>
+        </div>
+
+        <h3 class="sentence-heading">Practice Sentence-by-Sentence:</h3>
+        <div class="sentence-list" id="sentenceListContainer"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        Designed for Hong Kong Primary 5 EFL English Dictation Revision · Web Speech API
+      </div>
+    </footer>
+
+    <script type="module" src="/src/pages/dictation-1.js"></script>
+  </body>
+</html>

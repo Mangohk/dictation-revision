@@ -1,0 +1,145 @@
+/* Hub-specific layout */
+
+.hub-hero {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  animation: rise-in 0.45s ease both;
+}
+
+.hub-hero h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  letter-spacing: -0.03em;
+  color: var(--ink-strong);
+  line-height: 1.15;
+}
+
+.hub-hero p {
+  margin: 0;
+  max-width: 38rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.dictation-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 720px) {
+  .dictation-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.dictation-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem 1.35rem;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  animation: rise-in 0.5s ease both;
+}
+
+.dictation-card:nth-child(2) {
+  animation-delay: 0.06s;
+}
+
+.dictation-card:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.dictation-card.is-ready:hover {
+  transform: translateY(-2px);
+  border-color: #7dd3fc;
+  box-shadow: 0 10px 24px rgba(2, 132, 199, 0.12);
+}
+
+.dictation-card.is-placeholder {
+  border-style: dashed;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  opacity: 0.92;
+}
+
+.dictation-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dictation-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.55rem;
+}
+
+.meta-chip {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #475569;
+  background: #f1f5f9;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+}
+
+.dictation-card h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--ink-strong);
+  letter-spacing: -0.02em;
+}
+
+.dictation-card__date {
+  margin: 0.3rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.dictation-card__desc {
+  margin: 0;
+  color: #475569;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.dictation-card__actions {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.status-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.status-label.ready {
+  color: #047857;
+}
+
+.status-label.soon {
+  color: #94a3b8;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
