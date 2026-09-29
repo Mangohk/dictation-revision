@@ -1,145 +1,234 @@
-/* Hub-specific layout */
+/* Dictation Tools hub — matched to Mangohk/teaching-games portal pattern */
 
-.hub-hero {
-  display: grid;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-  animation: rise-in 0.45s ease both;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-.hub-hero h1 {
+:root {
+  --ink: #0f172a;
+  --panel: rgba(255, 255, 255, 0.96);
+  --shadow: 0 8px 28px rgba(15, 23, 42, 0.12);
+}
+
+body.hub-page {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
-  letter-spacing: -0.03em;
-  color: var(--ink-strong);
-  line-height: 1.15;
+  min-height: 100vh;
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-weight: 700;
+  color: var(--ink);
+  background: linear-gradient(165deg, #e0f2fe 0%, #fce7f3 45%, #fef9c3 100%);
+  padding: clamp(1rem, 4vw, 2.5rem);
 }
 
-.hub-hero p {
+.hub-updated {
+  position: fixed;
+  top: 0.45rem;
+  right: 0.7rem;
   margin: 0;
-  max-width: 38rem;
-  color: var(--muted);
-  font-size: 1rem;
-  line-height: 1.55;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.01em;
+  opacity: 0.55;
+  pointer-events: none;
+  user-select: none;
 }
 
-.dictation-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 1fr;
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-@media (min-width: 720px) {
-  .dictation-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.hub-page header {
+  text-align: center;
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
 }
 
-.dictation-card {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1.25rem 1.35rem;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-  animation: rise-in 0.5s ease both;
+.hub-page h1 {
+  font-family: 'Luckiest Guy', cursive;
+  font-weight: 400;
+  font-size: clamp(2rem, 6vw, 2.75rem);
+  letter-spacing: 0.03em;
+  margin: 0 0 0.35rem;
+  color: #0c4a6e;
+  text-shadow: 2px 2px 0 #fff;
 }
 
-.dictation-card:nth-child(2) {
-  animation-delay: 0.06s;
+.hub-page .sub {
+  margin: 0;
+  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+  color: #475569;
 }
 
-.dictation-card:nth-child(3) {
-  animation-delay: 0.12s;
-}
-
-.dictation-card.is-ready:hover {
-  transform: translateY(-2px);
-  border-color: #7dd3fc;
-  box-shadow: 0 10px 24px rgba(2, 132, 199, 0.12);
-}
-
-.dictation-card.is-placeholder {
-  border-style: dashed;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-  opacity: 0.92;
-}
-
-.dictation-card__top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.dictation-card__meta {
+.filter-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.55rem;
+  justify-content: center;
+  gap: 0.65rem;
+  margin: 0 0 clamp(1.25rem, 3vw, 2rem);
 }
 
-.meta-chip {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #475569;
-  background: #f1f5f9;
+.filter-btn {
+  font-family: 'Luckiest Guy', cursive;
+  font-weight: 400;
+  font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+  letter-spacing: 0.02em;
+  padding: 0.65rem 1.15rem;
   border-radius: 999px;
-  padding: 0.2rem 0.55rem;
+  border: 3px solid rgba(14, 165, 233, 0.35);
+  background: var(--panel);
+  color: #0369a1;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease,
+    color 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.dictation-card h2 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  color: var(--ink-strong);
-  letter-spacing: -0.02em;
+.filter-btn:hover,
+.filter-btn:focus-visible {
+  border-color: #38bdf8;
+  outline: none;
+  transform: translateY(-2px);
 }
 
-.dictation-card__date {
-  margin: 0.3rem 0 0;
-  font-size: 0.8rem;
-  color: var(--muted);
-  font-weight: 500;
+.filter-btn:active {
+  transform: translateY(0);
 }
 
-.dictation-card__desc {
-  margin: 0;
-  color: #475569;
-  font-size: 0.9rem;
-  line-height: 1.5;
+.filter-btn.active {
+  background: #0ea5e9;
+  border-color: #0284c7;
+  color: #fff;
+  box-shadow: 0 4px 0 #0369a1;
 }
 
-.dictation-card__actions {
-  margin-top: auto;
+.category {
+  margin-bottom: clamp(1.75rem, 5vw, 2.75rem);
+}
+
+.category[hidden] {
+  display: none !important;
+}
+
+.category:last-of-type {
+  margin-bottom: 0;
+}
+
+.category-title {
+  font-family: 'Luckiest Guy', cursive;
+  font-weight: 400;
+  font-size: clamp(1.35rem, 3.5vw, 1.75rem);
+  letter-spacing: 0.03em;
+  color: #0369a1;
+  margin: 0 0 1rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 3px solid rgba(14, 165, 233, 0.35);
+  text-shadow: 1px 1px 0 #fff;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: clamp(1rem, 3vw, 1.5rem);
+}
+
+.game-link {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  background: var(--panel);
+  border-radius: 24px;
+  padding: 1.75rem 1.25rem;
+  border: 3px solid rgba(14, 165, 233, 0.35);
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.status-label {
-  font-size: 0.75rem;
+.game-link:hover,
+.game-link:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.16);
+  border-color: #38bdf8;
+  outline: none;
+}
+
+.game-link:active {
+  transform: translateY(-1px);
+}
+
+.game-link.is-placeholder {
+  border-style: dashed;
+  opacity: 0.85;
+  cursor: default;
+}
+
+.thumb-wrap {
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 16 / 9;
+  margin: 0 auto 0.75rem;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+  background: #e2e8f0;
+}
+
+.game-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.game-link h3 {
+  font-family: 'Luckiest Guy', cursive;
+  font-weight: 400;
+  font-size: 1.35rem;
+  margin: 0 0 0.4rem;
+  color: #0369a1;
+}
+
+.game-link p {
+  margin: 0;
+  font-size: 0.88rem;
   font-weight: 700;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+.skill-tag {
+  display: inline-block;
+  margin-top: 0.65rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  border: 2px solid transparent;
 }
 
-.status-label.ready {
-  color: #047857;
+.skill-tag[data-skill='dictation'] {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #93c5fd;
 }
 
-.status-label.soon {
-  color: #94a3b8;
+.hint {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #64748b;
 }
 
-@keyframes rise-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.hint code {
+  font-size: 0.78rem;
 }

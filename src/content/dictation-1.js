@@ -4,7 +4,7 @@ export const DICTATION_1 = {
   title: 'Dictation 1',
   dateLabel: '16-10-2026 Friday',
   term: 'P5 Term 1',
-  mode: 'Broadcast Read-Aloud',
+  mode: 'Self-study Read-Aloud',
   vocabulary: [
     { id: 1, text: 'quietly', note: 'adverb' },
     { id: 2, text: 'rudely', note: 'adverb' },
