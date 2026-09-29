@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>P5 English Dictation 1 - Read Aloud Revision Studio</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Lexend for clear educational typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Lexend', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Word highlighting transition */
+    .read-word {
+      transition: all 0.15s ease-in-out;
+      border-radius: 0.375rem;
+      padding: 0.1rem 0.35rem;
+      margin: 0 0.05rem;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .read-word:hover {
+      background-color: #dbeafe;
+      color: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    /* Active highlighted word during speech */
+    .read-word.speaking-now {
+      background-color: #facc15 !important; /* High-contrast golden yellow */
+      color: #0f172a !important;
+      box-shadow: 0 0 0 2px #eab308, 0 4px 6px -1px rgba(0, 0, 0, 0.12);
+      transform: scale(1.08) translateY(-1px);
+      font-weight: 700;
+    }
+
+    /* Vocabulary card highlighted state */
+    .vocab-item.active-vocab {
+      border-color: #eab308 !important;
+      background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%) !important;
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.25);
+      transform: scale(1.02);
+    }
+
+    /* Sound wave animation */
+    @keyframes soundwave {
+      0%, 100% { height: 6px; }
+      50% { height: 22px; }
+    }
+    .wave-bar {
+      width: 3px;
+      background-color: #0284c7;
+      border-radius: 9999px;
+      animation: soundwave 1s ease-in-out infinite;
+    }
+    .wave-bar:nth-child(1) { animation-delay: 0.1s; }
+    .wave-bar:nth-child(2) { animation-delay: 0.3s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.5s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.2s; }
+    .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen antialiased flex flex-col font-sans">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/20">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-bold font-display text-slate-900 tracking-tight leading-none">English Revision Studio</h1>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800">
+              P5 Term 1
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1 font-medium">Dictation 1 (16-10-2026 Friday) • Interactive Read-Aloud</p>
+        </div>
+      </div>
+
+      <!-- Live Broadcast status badge -->
+      <div id="statusBadge" class="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-slate-600 text-xs font-medium">
+        <span class="w-2.5 h-2.5 rounded-full bg-slate-400" id="statusDot"></span>
+        <span id="statusText">Ready to read</span>
+        <div id="soundWave" class="hidden flex items-center gap-0.5 h-5 ml-1">
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-6 flex-1 w-full space-y-6">
+    <!-- Voice & Speed Control Panel -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        
+        <!-- Voice Selector -->
+        <div class="flex-1 min-w-[240px]">
+          <label for="voiceSelect" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
+            Broadcaster Voice
+          </label>
+          <div class="relative">
+            <select id="voiceSelect" class="w-full bg-slate-50 hover:bg-slate-100 border border-slate-300 text-slate-800 text-sm rounded-lg px-3.5 py-2.5 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-sky-500 transition-colors cursor-pointer font-medium">
+              <option value="">Searching for natural voices...</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-500">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pace Selector (Calibrated 0.6x Slow, 0.72x Relaxed, 0.85x Broadcast, 1.0x Standard) -->
+        <div class="w-full sm:w-auto">
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
+            Speaking Pace (EFL Friendly)
+          </label>
+          <div class="inline-flex rounded-lg p-1 bg-slate-100 border border-slate-200 text-xs font-medium" role="group">
+            <button type="button" data-rate="0.60" class="rate-btn px-2.5 sm:px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all" title="Slow pace for phonics and listening detail">
+              Slow (0.60x)
+            </button>
+            <button type="button" data-rate="0.72" class="rate-btn px-2.5 sm:px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all" title="Relaxed dictation speed">
+              Relaxed (0.72x)
+            </button>
+            <button type="button" data-rate="0.85" class="rate-btn active-rate px-2.5 sm:px-3 py-1.5 rounded-md bg-white text-sky-700 shadow-sm font-semibold transition-all" title="TV News Reporter cadence">
+              Broadcast (0.85x)
+            </button>
+            <button type="button" data-rate="1.00" class="rate-btn px-2.5 sm:px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all" title="Standard conversational pace">
+              Standard (1.0x)
+            </button>
+          </div>
+        </div>
+
+        <!-- Stop Global Button -->
+        <div class="flex items-end">
+          <button id="globalStopBtn" onclick="stopSpeech()" class="px-4 py-2.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-sm font-semibold flex items-center gap-2 transition active:scale-95">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"></rect></svg>
+            Stop
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Quick Tips Guide for students -->
+      <div class="mt-4 pt-3.5 border-t border-slate-100 flex flex-wrap items-center gap-4 text-xs text-slate-500">
+        <span class="inline-flex items-center gap-1 font-semibold text-sky-700">
+          <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Study Tip:
+        </span>
+        <span>Tap any word or phrase to hear its isolated sound.</span>
+        <span>Click <strong class="text-slate-700">"Listen"</strong> to follow along with the glowing highlighter.</span>
+      </div>
+    </section>
+
+    <!-- Part A: Vocabulary -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded-md text-xs font-bold bg-amber-100 text-amber-900 uppercase">Part A</span>
+            <h2 class="text-xl font-bold font-display text-slate-900">Vocabulary Words & Phrases</h2>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">10 target items for Dictation 1</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="playVocabularyList()" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-semibold text-sm shadow-sm shadow-sky-600/20 flex items-center gap-2 transition">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            Listen to All (1–10)
+          </button>
+        </div>
+      </div>
+
+      <!-- Vocab Items Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-2" id="vocabContainer">
+        <!-- Injected via JavaScript -->
+      </div>
+    </section>
+
+    <!-- Part B: Paragraphs -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded-md text-xs font-bold bg-emerald-100 text-emerald-900 uppercase">Part B</span>
+            <h2 class="text-xl font-bold font-display text-slate-900">Paragraphs</h2>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Passage revision with live word-by-word highlighting</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="playFullParagraph()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-semibold text-sm shadow-sm shadow-emerald-600/20 flex items-center gap-2 transition">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            Listen to Passage
+          </button>
+        </div>
+      </div>
+
+      <!-- Passage display container -->
+      <div class="bg-slate-50 rounded-xl p-5 sm:p-6 border border-slate-200/80">
+        <p id="paragraphDisplay" class="text-xl sm:text-2xl leading-loose font-display text-slate-800 tracking-wide select-none">
+          <!-- Injected via JavaScript -->
+        </p>
+      </div>
+
+      <!-- Sentence Breakdown Helper -->
+      <div class="pt-2">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Practice Sentence-by-Sentence:</h3>
+        <div class="space-y-2" id="sentenceListContainer">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-auto py-6 border-t border-slate-200 bg-white text-center text-xs text-slate-400">
+    P5 EFL English Dictation Revision Studio • Single-File Embedded Edition
+  </footer>
+
+  <script>
+    // P5 Dictation 1 Content
+    const VOCABULARY_DATA = [
+      { id: 1, text: "quietly", note: "adverb" },
+      { id: 2, text: "rudely", note: "adverb" },
+      { id: 3, text: "late", note: "adverb / adjective" },
+      { id: 4, text: "early", note: "adverb / adjective" },
+      { id: 5, text: "each other", note: "phrase" },
+      { id: 6, text: "be mean to", note: "phrase" },
+      { id: 7, text: "listen to", note: "phrase" },
+      { id: 8, text: "share things with", note: "phrase" },
+      { id: 9, text: "laugh at", note: "phrase" },
+      { id: 10, text: "shout at", note: "phrase" }
+    ];
+
+    const PARAGRAPH_TEXT = "We should be nice to our classmates at school. We should help our friends kindly. We shouldn't fight with one another. We should also behave well in public places too. We should speak softly in restaurants and wait patiently at bus stops. We should never talk loudly on the phone because it disturbs others.";
+
+    // Speech Configuration State
+    const synth = window.speechSynthesis;
+    let availableVoices = [];
+    let selectedVoice = null;
+    let speechRate = 0.85; // Default: Broadcast pace
+    let currentUtterance = null;
+    let isSpeakingVocabLoop = false;
+    let vocabLoopTimeout = null;
+
+    const voiceSelect = document.getElementById('voiceSelect');
+    const statusBadge = document.getElementById('statusBadge');
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    const soundWave = document.getElementById('soundWave');
+
+    function populateVoiceList() {
+      if (!synth) return;
+      availableVoices = synth.getVoices();
+
+      // Filter for English voices
+      const englishVoices = availableVoices.filter(v => v.lang.startsWith('en'));
+
+      voiceSelect.innerHTML = '';
+      if (englishVoices.length === 0) {
+        const opt = document.createElement('option');
+        opt.textContent = "Default System Voice";
+        opt.value = "";
+        voiceSelect.appendChild(opt);
+        return;
+      }
+
+      // Priority keywords for clear TV news reporter voices
+      const reporterVoiceKeywords = [
+        'Google UK English Female',
+        'Google UK English Male',
+        'Google US English',
+        'Daniel',
+        'Samantha',
+        'Oliver',
+        'Serena',
+        'Arthur',
+        'Natural',
+        'Neural'
+      ];
+
+      // Sort voices to put reporter-like voices first
+      englishVoices.sort((a, b) => {
+        const aScore = reporterVoiceKeywords.some(kw => a.name.includes(kw)) ? 1 : 0;
+        const bScore = reporterVoiceKeywords.some(kw => b.name.includes(kw)) ? 1 : 0;
+        return bScore - aScore;
+      });
+
+      englishVoices.forEach((voice) => {
+        const option = document.createElement('option');
+        option.value = voice.name;
+        const isUK = voice.lang.includes('GB');
+        const flag = isUK ? '🇬🇧' : '🇺🇸';
+        option.textContent = `${flag} ${voice.name} (${voice.lang})`;
+        voiceSelect.appendChild(option);
+      });
+
+      // Default to Daniel / Google UK English Female (classic British broadcast) or the top English voice
+      const preferred = englishVoices.find(v => 
+        v.name.includes('Google UK English Female') || 
+        v.name.includes('Daniel') || 
+        v.name.includes('Natural') ||
+        v.lang === 'en-GB'
+      ) || englishVoices[0];
+
+      if (preferred) {
+        voiceSelect.value = preferred.name;
+        selectedVoice = preferred;
+      }
+    }
+
+    if (synth && synth.onvoiceschanged !== undefined) {
+      synth.onvoiceschanged = populateVoiceList;
+    }
+    populateVoiceList();
+
+    voiceSelect.addEventListener('change', () => {
+      selectedVoice = availableVoices.find(v => v.name === voiceSelect.value) || null;
+    });
+
+    document.querySelectorAll('.rate-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.rate-btn').forEach(b => {
+          b.classList.remove('active-rate', 'bg-white', 'text-sky-700', 'shadow-sm', 'font-semibold');
+          b.classList.add('text-slate-600');
+        });
+        btn.classList.add('active-rate', 'bg-white', 'text-sky-700', 'shadow-sm', 'font-semibold');
+        btn.classList.remove('text-slate-600');
+        speechRate = parseFloat(btn.dataset.rate);
+      });
+    });
+
+    function setBroadcastingStatus(active, message = "Broadcasting...") {
+      if (active) {
+        statusBadge.className = "flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-sky-50 border border-sky-200 text-sky-700 text-xs font-semibold shadow-sm";
+        statusDot.className = "w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping";
+        statusText.textContent = message;
+        soundWave.classList.remove('hidden');
+      } else {
+        statusBadge.className = "flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-slate-600 text-xs font-medium";
+        statusDot.className = "w-2.5 h-2.5 rounded-full bg-slate-400";
+        statusText.textContent = "Ready to read";
+        soundWave.classList.add('hidden');
+      }
+    }
+
+    function clearHighlights() {
+      document.querySelectorAll('.speaking-now').forEach(el => el.classList.remove('speaking-now'));
+      document.querySelectorAll('.active-vocab').forEach(el => el.classList.remove('active-vocab'));
+    }
+
+    function stopSpeech() {
+      if (vocabLoopTimeout) clearTimeout(vocabLoopTimeout);
+      isSpeakingVocabLoop = false;
+      if (synth) synth.cancel();
+      clearHighlights();
+      setBroadcastingStatus(false);
+    }
+
+    const vocabContainer = document.getElementById('vocabContainer');
+    VOCABULARY_DATA.forEach(item => {
+      const card = document.createElement('div');
+      card.id = `vocab-card-${item.id}`;
+      card.className = "vocab-item group flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-sky-300 hover:bg-sky-50/50 bg-white cursor-pointer transition-all duration-150 select-none shadow-sm";
+      card.innerHTML = `
+        <div class="flex items-center gap-3">
+          <span class="w-7 h-7 rounded-lg bg-slate-100 group-hover:bg-sky-100 text-slate-600 group-hover:text-sky-700 flex items-center justify-center text-xs font-bold font-mono transition-colors">
+            ${item.id}
+          </span>
+          <div>
+            <div class="text-base font-bold font-display text-slate-800">${item.text}</div>
+            <div class="text-[10px] uppercase font-semibold text-slate-400 tracking-wider">${item.note}</div>
+          </div>
+        </div>
+        <div class="text-slate-300 group-hover:text-sky-500 transition-colors">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        </div>
+      `;
+
+      card.addEventListener('click', () => {
+        speakSingleWordOrPhrase(item.text, card);
+      });
+
+      vocabContainer.appendChild(card);
+    });
+
+    const paragraphDisplay = document.getElementById('paragraphDisplay');
+    const paragraphWords = PARAGRAPH_TEXT.split(' ');
+    const wordSpanElements = [];
+
+    paragraphDisplay.innerHTML = '';
+    paragraphWords.forEach((wordStr, index) => {
+      const span = document.createElement('span');
+      span.className = 'read-word';
+      span.textContent = wordStr;
+      span.dataset.index = index;
+      
+      span.addEventListener('click', () => {
+        // Strip trailing punctuation for isolated word clarity
+        const cleanWord = wordStr.replace(/^[^\w']+|[^\w']+$/g, '');
+        speakSingleWordOrPhrase(cleanWord, span);
+      });
+
+      paragraphDisplay.appendChild(span);
+      paragraphDisplay.appendChild(document.createTextNode(' '));
+      wordSpanElements.push(span);
+    });
+
+    // Breakdown into individual sentences
+    const sentenceListContainer = document.getElementById('sentenceListContainer');
+    const sentences = PARAGRAPH_TEXT.match(/[^.!?]+[.!?]+/g) || [PARAGRAPH_TEXT];
+
+    sentences.forEach((sentence, idx) => {
+      const sDiv = document.createElement('div');
+      sDiv.className = "flex items-center justify-between p-2.5 px-3.5 rounded-lg bg-white border border-slate-200 hover:border-slate-300 text-sm text-slate-700 transition";
+      sDiv.innerHTML = `
+        <span class="flex-1 pr-3"><strong class="text-slate-400 mr-2 text-xs font-mono">S${idx+1}</strong>${sentence.trim()}</span>
+        <button class="px-2.5 py-1 text-xs rounded-md bg-slate-100 hover:bg-sky-100 hover:text-sky-700 font-semibold text-slate-600 transition flex items-center gap-1 flex-shrink-0">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          Read
+        </button>
+      `;
+
+      sDiv.querySelector('button').addEventListener('click', (e) => {
+        e.stopPropagation();
+        readSentenceIsolated(sentence.trim());
+      });
+
+      sentenceListContainer.appendChild(sDiv);
+    });
+
+    function speakSingleWordOrPhrase(text, targetElement) {
+      stopSpeech();
+      clearHighlights();
+
+      if (targetElement) {
+        if (targetElement.classList.contains('vocab-item')) {
+          targetElement.classList.add('active-vocab');
+        } else {
+          targetElement.classList.add('speaking-now');
+        }
+      }
+
+      setBroadcastingStatus(true, `Reading "${text}"`);
+
+      const utter = new SpeechSynthesisUtterance(text);
+      if (selectedVoice) utter.voice = selectedVoice;
+      utter.rate = speechRate * 0.95; // Slight fine-tuning for crisp phoneme articulation
+      utter.pitch = 1.0;
+
+      utter.onend = () => {
+        clearHighlights();
+        setBroadcastingStatus(false);
+      };
+
+      utter.onerror = () => {
+        clearHighlights();
+        setBroadcastingStatus(false);
+      };
+
+      synth.speak(utter);
+    }
+
+    function readSentenceIsolated(sentenceText) {
+      stopSpeech();
+      clearHighlights();
+      setBroadcastingStatus(true, "Reading sentence...");
+
+      const utter = new SpeechSynthesisUtterance(sentenceText);
+      if (selectedVoice) utter.voice = selectedVoice;
+      utter.rate = speechRate;
+      utter.pitch = 1.0;
+
+      utter.onend = () => {
+        clearHighlights();
+        setBroadcastingStatus(false);
+      };
+      utter.onerror = () => {
+        clearHighlights();
+        setBroadcastingStatus(false);
+      };
+
+      synth.speak(utter);
+    }
+
+    // Play all 10 vocabulary items sequentially with pauses
+    function playVocabularyList() {
+      stopSpeech();
+      isSpeakingVocabLoop = true;
+      let currentIndex = 0;
+
+      function speakItem() {
+        if (!isSpeakingVocabLoop || currentIndex >= VOCABULARY_DATA.length) {
+          stopSpeech();
+          return;
+        }
+
+        clearHighlights();
+        const currentItem = VOCABULARY_DATA[currentIndex];
+        const card = document.getElementById(`vocab-card-${currentItem.id}`);
+        if (card) {
+          card.classList.add('active-vocab');
+          card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        setBroadcastingStatus(true, `Vocabulary ${currentIndex + 1} of 10: "${currentItem.text}"`);
+
+        const speakText = `${currentIndex + 1}. ${currentItem.text}`;
+        const utter = new SpeechSynthesisUtterance(speakText);
+        if (selectedVoice) utter.voice = selectedVoice;
+        utter.rate = speechRate;
+        utter.pitch = 1.0;
+
+        utter.onend = () => {
+          if (!isSpeakingVocabLoop) return;
+          currentIndex++;
+          // Pause between words so students can absorb the spelling
+          vocabLoopTimeout = setTimeout(speakItem, 800);
+        };
+
+        utter.onerror = () => {
+          stopSpeech();
+        };
+
+        synth.speak(utter);
+      }
+
+      speakItem();
+    }
+
+    function playFullParagraph() {
+      stopSpeech();
+      clearHighlights();
+
+      setBroadcastingStatus(true, "Broadcasting passage...");
+
+      currentUtterance = new SpeechSynthesisUtterance(PARAGRAPH_TEXT);
+      if (selectedVoice) currentUtterance.voice = selectedVoice;
+      currentUtterance.rate = speechRate;
+      currentUtterance.pitch = 1.0;
+
+      let wordPointer = 0;
+
+      // Word-by-word tracking event
+      currentUtterance.onboundary = function(event) {
+        if (event.name === 'word') {
+          clearHighlights();
+          if (wordPointer < wordSpanElements.length) {
+            const currentSpan = wordSpanElements[wordPointer];
+            currentSpan.classList.add('speaking-now');
+            currentSpan.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+            wordPointer++;
+          }
+        }
+      };
+
+      currentUtterance.onend = function() {
+        clearHighlights();
+        setBroadcastingStatus(false);
+      };
+
+      currentUtterance.onerror = function() {
+        clearHighlights();
+        setBroadcastingStatus(false);
+      };
+
+      synth.speak(currentUtterance);
+    }
+  </script>
+</body>
+</html>

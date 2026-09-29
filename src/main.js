@@ -1,73 +1,104 @@
-import './styles/studio.css'
 import './styles/hub.css'
-import { DICTATIONS } from './dictations.js'
+import { DICTATIONS, YEAR_CATEGORIES } from './dictations.js'
 
-const grid = document.getElementById('dictationGrid')
+const nav = document.getElementById('dictationNav')
+const STORAGE_KEY = 'dictation-tools-filter'
 
 function renderCard(dictation) {
   const isReady = dictation.status === 'ready'
-  const article = document.createElement(isReady ? 'a' : 'article')
-  article.className = `card dictation-card ${isReady ? 'is-ready' : 'is-placeholder'}`
+  const tag = document.createElement(isReady ? 'a' : 'article')
+  tag.className = `game-link ${isReady ? 'is-ready' : 'is-placeholder'}`
   if (isReady) {
-    article.href = dictation.href
+    tag.href = dictation.href
+  }
+  tag.setAttribute('data-skill', dictation.skill || 'dictation')
+
+  tag.innerHTML = `
+    <span class="thumb-wrap">
+      <img
+        class="game-thumb"
+        src="${dictation.thumb}"
+        alt=""
+        width="640"
+        height="360"
+        decoding="async"
+        loading="lazy"
+      />
+    </span>
+    <h3>${dictation.yearLabel} · ${dictation.title}</h3>
+    <p>${dictation.description}</p>
+    <span class="skill-tag" data-skill="${dictation.skill || 'dictation'}">${
+      dictation.skillLabel || 'dictation'
+    }</span>
+  `
+
+  return tag
+}
+
+function renderHub() {
+  nav.innerHTML = ''
+
+  YEAR_CATEGORIES.forEach((category) => {
+    const items = DICTATIONS.filter((d) => d.year === category.id)
+    if (!items.length) return
+
+    const section = document.createElement('section')
+    section.className = 'category'
+    section.dataset.category = category.id
+    section.setAttribute('aria-labelledby', `cat-${category.id}`)
+
+    const title = document.createElement('h2')
+    title.className = 'category-title'
+    title.id = `cat-${category.id}`
+    title.textContent = category.label
+
+    const grid = document.createElement('div')
+    grid.className = 'grid'
+    items.forEach((item) => grid.appendChild(renderCard(item)))
+
+    section.appendChild(title)
+    section.appendChild(grid)
+    nav.appendChild(section)
+  })
+}
+
+function setupFilters() {
+  const buttons = document.querySelectorAll('.filter-btn')
+  const sections = () => document.querySelectorAll('.category')
+  const valid = { all: true }
+  YEAR_CATEGORIES.forEach((c) => {
+    valid[c.id] = true
+  })
+
+  function showFilter(id) {
+    if (!valid[id]) id = 'all'
+    sections().forEach((section) => {
+      section.hidden = id !== 'all' && section.getAttribute('data-category') !== id
+    })
+    buttons.forEach((btn) => {
+      const active = btn.getAttribute('data-filter') === id
+      btn.classList.toggle('active', active)
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false')
+    })
+    try {
+      localStorage.setItem(STORAGE_KEY, id)
+    } catch {
+      /* ignore quota / private mode */
+    }
   }
 
-  article.innerHTML = `
-    <div class="dictation-card__top">
-      <div>
-        <h2>${dictation.title}</h2>
-        <p class="dictation-card__date">${dictation.dateLabel}</p>
-        <div class="dictation-card__meta">
-          <span class="meta-chip">${dictation.term}</span>
-          ${(dictation.parts || [])
-            .map((part) => `<span class="meta-chip">${part}</span>`)
-            .join('')}
-        </div>
-      </div>
-      <span class="status-label ${isReady ? 'ready' : 'soon'}">
-        ${isReady ? 'Ready' : 'Soon'}
-      </span>
-    </div>
-    <p class="dictation-card__desc">${dictation.description}</p>
-    <div class="dictation-card__actions">
-      ${
-        isReady
-          ? `<span class="btn btn-primary">Open read-aloud
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </span>`
-          : `<span class="btn btn-subtle" aria-disabled="true">Coming soon</span>`
-      }
-    </div>
-  `
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => showFilter(btn.getAttribute('data-filter')))
+  })
 
-  return article
+  let saved = 'all'
+  try {
+    saved = localStorage.getItem(STORAGE_KEY) || 'all'
+  } catch {
+    saved = 'all'
+  }
+  showFilter(saved)
 }
 
-function renderPlaceholder() {
-  const article = document.createElement('article')
-  article.className = 'card dictation-card is-placeholder'
-  article.innerHTML = `
-    <div class="dictation-card__top">
-      <div>
-        <h2>Next dictation</h2>
-        <p class="dictation-card__date">Link slot reserved</p>
-        <div class="dictation-card__meta">
-          <span class="meta-chip">P5 Term 1</span>
-        </div>
-      </div>
-      <span class="status-label soon">Soon</span>
-    </div>
-    <p class="dictation-card__desc">
-      More dictation read-aloud sessions will appear here as they are published for Term 1.
-    </p>
-    <div class="dictation-card__actions">
-      <span class="btn btn-subtle" aria-disabled="true">Coming soon</span>
-    </div>
-  `
-  return article
-}
-
-DICTATIONS.forEach((item) => grid.appendChild(renderCard(item)))
-grid.appendChild(renderPlaceholder())
+renderHub()
+setupFilters()
