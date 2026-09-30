@@ -114,7 +114,7 @@ body.hub-page {
 }
 
 .filter-bar {
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.25rem;
@@ -127,7 +127,6 @@ body.hub-page {
   animation: hub-rise 0.75s ease-out 0.08s both;
   width: fit-content;
   max-width: 100%;
-  display: flex;
 }
 
 .filter-btn {
