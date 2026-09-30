@@ -6,7 +6,7 @@ const STORAGE_KEY = 'dictation-tools-filter'
 function renderCard(dictation) {
   const isReady = dictation.status === 'ready'
   const tag = document.createElement(isReady ? 'a' : 'article')
-  tag.className = `game-link ${isReady ? 'is-ready' : 'is-placeholder'}`
+  tag.className = `practice-card ${isReady ? 'is-ready' : 'is-placeholder'}`
   if (isReady) {
     tag.href = dictation.href
   }
@@ -15,7 +15,7 @@ function renderCard(dictation) {
   tag.innerHTML = `
     <span class="thumb-wrap">
       <img
-        class="game-thumb"
+        class="practice-thumb"
         src="${dictation.thumb}"
         alt=""
         width="640"
