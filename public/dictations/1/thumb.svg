@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Dictation 1 thumbnail">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e0f2fe"/>
+      <stop offset="55%" stop-color="#fce7f3"/>
+      <stop offset="100%" stop-color="#fef9c3"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <rect x="48" y="56" width="544" height="248" rx="28" fill="#ffffff" stroke="#7dd3fc" stroke-width="8"/>
+  <circle cx="150" cy="180" r="52" fill="#0ea5e9"/>
+  <path d="M132 180c0-14 8-26 18-26s18 12 18 26-8 26-18 26-18-12-18-26zm44-34v68c18-8 30-24 30-34s-12-26-30-34z" fill="#fff"/>
+  <text x="230" y="155" font-family="Nunito, system-ui, sans-serif" font-size="36" font-weight="800" fill="#0c4a6e">Primary 5</text>
+  <text x="230" y="210" font-family="Nunito, system-ui, sans-serif" font-size="42" font-weight="800" fill="#0369a1">Dictation 1</text>
+  <text x="230" y="250" font-family="Nunito, system-ui, sans-serif" font-size="22" font-weight="700" fill="#64748b">Self-study practice</text>
+</svg>

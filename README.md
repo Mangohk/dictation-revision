@@ -20,6 +20,8 @@ npm run dev
 
 Open the printed local URL (usually `http://localhost:5173/`). From the hub, click **Primary 5 · Dictation 1**.
 
+GitHub Pages deploys the repo root on `main` (no build step). Hub/child pages use **relative** asset and navigation paths so the project site at `/dictation-revision/` works the same as local Vite. Prefer `npm run dev` while editing; `npm run build` / `npm run preview` remain available for a production bundle check.
+
 ## Add another dictation
 
 1. Add content under `src/content/`.

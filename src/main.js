@@ -1,4 +1,3 @@
-import './styles/hub.css'
 import { DICTATIONS, YEAR_CATEGORIES } from './dictations.js'
 
 const nav = document.getElementById('dictationNav')

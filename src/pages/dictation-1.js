@@ -1,5 +1,3 @@
-import '../styles/studio.css'
-import '../styles/review.css'
 import { DICTATION_1 } from '../content/dictation-1.js'
 import { createSpeechController } from '../speech.js'
 
