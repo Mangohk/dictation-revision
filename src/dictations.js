@@ -1,6 +1,7 @@
 /**
  * Registry of dictation revision pages.
- * Mirrors the teaching-games hub pattern: year category → child exercise folder.
+ * Year category → child exercise folder (same routing idea as teaching-games,
+ * but hub visuals are Quiet Practice Desk — not the games portal look).
  * Paths are relative to the hub page so GitHub Pages project sites work
  * (https://<user>.github.io/<repo>/) without a Vite-only absolute root.
  * Add a new entry here and a matching route under /dictations/<id>/ to ship another page.

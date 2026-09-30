@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Dictation 1 thumbnail">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#e0f2fe"/>
-      <stop offset="55%" stop-color="#fce7f3"/>
-      <stop offset="100%" stop-color="#fef9c3"/>
+      <stop offset="0%" stop-color="#e7f0ee"/>
+      <stop offset="55%" stop-color="#d8e4ea"/>
+      <stop offset="100%" stop-color="#cfe0db"/>
     </linearGradient>
   </defs>
   <rect width="640" height="360" fill="url(#bg)"/>
-  <rect x="48" y="56" width="544" height="248" rx="28" fill="#ffffff" stroke="#7dd3fc" stroke-width="8"/>
-  <circle cx="150" cy="180" r="52" fill="#0ea5e9"/>
-  <path d="M132 180c0-14 8-26 18-26s18 12 18 26-8 26-18 26-18-12-18-26zm44-34v68c18-8 30-24 30-34s-12-26-30-34z" fill="#fff"/>
-  <text x="230" y="155" font-family="Nunito, system-ui, sans-serif" font-size="36" font-weight="800" fill="#0c4a6e">Primary 5</text>
-  <text x="230" y="210" font-family="Nunito, system-ui, sans-serif" font-size="42" font-weight="800" fill="#0369a1">Dictation 1</text>
-  <text x="230" y="250" font-family="Nunito, system-ui, sans-serif" font-size="22" font-weight="700" fill="#64748b">Self-study practice</text>
+  <rect x="48" y="56" width="544" height="248" rx="16" fill="#fcfdfc" stroke="#2f6f68" stroke-opacity="0.28" stroke-width="3"/>
+  <circle cx="150" cy="180" r="48" fill="#2f6f68"/>
+  <path d="M134 180c0-13 7-24 16-24s16 11 16 24-7 24-16 24-16-11-16-24zm40-31v62c16-7 27-22 27-31s-11-24-27-31z" fill="#fcfdfc"/>
+  <text x="230" y="155" font-family="Figtree, Segoe UI, sans-serif" font-size="34" font-weight="700" fill="#1c2b33">Primary 5</text>
+  <text x="230" y="208" font-family="Fraunces, Palatino Linotype, serif" font-size="40" font-weight="600" fill="#1f524d">Dictation 1</text>
+  <text x="230" y="250" font-family="Figtree, Segoe UI, sans-serif" font-size="20" font-weight="600" fill="#4a5c66">Self-study practice</text>
 </svg>

@@ -1,6 +1,6 @@
 # dictation-revision
 
-**Dictation Tools** — self-study portal for P5 dictation revision (pattern matched to [teaching-games](https://mangohk.github.io/teaching-games/)). Students revise on their own before each dictation.
+**Dictation Tools** — calm self-study portal for P5 dictation revision (visually distinct from the playful [teaching-games](https://mangohk.github.io/teaching-games/) hub). Students revise on their own before each dictation.
 
 ## Routes
 

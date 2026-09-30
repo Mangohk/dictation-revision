@@ -1,4 +1,4 @@
-/* Dictation review page layout */
+/* Dictation review page layout — Quiet Practice Desk */
 
 .review-stack {
   display: grid;
@@ -26,19 +26,21 @@
   gap: 0.75rem;
   padding-bottom: 1rem;
   margin-bottom: 1rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--border);
 }
 
 .panel__header h2 {
   margin: 0;
   font-family: var(--font-display);
   font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--ink-strong);
 }
 
 .panel__header p {
   margin: 0.3rem 0 0;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   color: var(--muted);
 }
 
@@ -73,23 +75,23 @@
 .select-wrap select {
   width: 100%;
   appearance: none;
-  background: #f8fafc;
-  border: 1px solid #cbd5e1;
+  background: rgba(231, 240, 238, 0.65);
+  border: 1px solid var(--border);
   color: var(--ink);
   font: inherit;
   font-size: 0.875rem;
   font-weight: 500;
-  border-radius: 0.65rem;
+  border-radius: var(--radius-sm);
   padding: 0.65rem 2.25rem 0.65rem 0.85rem;
   cursor: pointer;
 }
 
 .select-wrap select:hover {
-  background: #f1f5f9;
+  background: var(--accent-soft);
 }
 
 .select-wrap select:focus {
-  outline: 2px solid #38bdf8;
+  outline: 2px solid rgba(47, 111, 104, 0.45);
   outline-offset: 1px;
 }
 
@@ -99,7 +101,7 @@
   right: 0.7rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #64748b;
+  color: var(--muted);
   width: 1rem;
   height: 1rem;
 }
@@ -108,46 +110,47 @@
   display: inline-flex;
   flex-wrap: wrap;
   gap: 0.15rem;
-  padding: 0.2rem;
-  border-radius: 0.65rem;
-  background: #f1f5f9;
+  padding: 0.25rem;
+  border-radius: 12px;
+  background: rgba(252, 253, 252, 0.8);
   border: 1px solid var(--border);
 }
 
 .rate-btn {
   appearance: none;
-  border: 0;
+  border: 1px solid transparent;
   background: transparent;
-  color: #475569;
+  color: var(--ink-soft);
   font: inherit;
   font-size: 0.75rem;
   font-weight: 500;
   padding: 0.4rem 0.65rem;
-  border-radius: 0.45rem;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
 .rate-btn:hover {
-  color: var(--ink-strong);
+  color: var(--ink);
+  background: rgba(47, 111, 104, 0.08);
 }
 
 .rate-btn.active-rate {
-  background: white;
-  color: #0369a1;
+  background: var(--accent);
+  border-color: var(--accent-deep);
+  color: #fcfdfc;
   font-weight: 700;
-  box-shadow: var(--shadow-sm);
 }
 
 .tips-row {
   margin-top: 1rem;
   padding-top: 0.85rem;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid var(--border);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem 1rem;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   color: var(--muted);
 }
 
@@ -155,14 +158,14 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  color: #0369a1;
+  color: var(--accent-deep);
   font-weight: 700;
 }
 
 .tips-row strong.tip-label svg {
   width: 1rem;
   height: 1rem;
-  color: #0ea5e9;
+  color: var(--accent);
 }
 
 .vocab-grid {
@@ -186,9 +189,9 @@
 .vocab-index {
   width: 1.75rem;
   height: 1.75rem;
-  border-radius: 0.5rem;
-  background: #f1f5f9;
-  color: #475569;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
   display: grid;
   place-items: center;
   font-size: 0.75rem;
@@ -199,15 +202,15 @@
 }
 
 .vocab-item:hover .vocab-index {
-  background: #e0f2fe;
-  color: #0369a1;
+  background: #c9e4de;
+  color: var(--accent-deep);
 }
 
 .vocab-text {
   font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 700;
-  color: #1e293b;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
 }
 
 .vocab-note {
@@ -215,17 +218,17 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #94a3b8;
+  color: #7a8b94;
   margin-top: 0.1rem;
 }
 
 .vocab-icon {
-  color: #cbd5e1;
+  color: #b0bec5;
   transition: color 0.15s ease;
 }
 
 .vocab-item:hover .vocab-icon {
-  color: #0ea5e9;
+  color: var(--accent);
 }
 
 .vocab-icon svg {
@@ -234,9 +237,9 @@
 }
 
 .passage-box {
-  background: #f8fafc;
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  border-radius: 0.85rem;
+  background: rgba(231, 240, 238, 0.55);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   padding: 1.25rem 1.35rem;
 }
 
@@ -245,8 +248,8 @@
   font-family: var(--font-display);
   font-size: clamp(1.2rem, 2.4vw, 1.5rem);
   line-height: 1.9;
-  letter-spacing: 0.02em;
-  color: #1e293b;
+  letter-spacing: 0.01em;
+  color: var(--ink);
   user-select: none;
 }
 
@@ -256,7 +259,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #94a3b8;
+  color: #7a8b94;
 }
 
 .sentence-list {
@@ -270,16 +273,16 @@
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.6rem 0.85rem;
-  border-radius: 0.65rem;
-  background: white;
+  border-radius: var(--radius-sm);
+  background: var(--paper);
   border: 1px solid var(--border);
   font-size: 0.875rem;
-  color: #334155;
+  color: var(--ink-soft);
   transition: border-color 0.15s ease;
 }
 
 .sentence-row:hover {
-  border-color: #cbd5e1;
+  border-color: rgba(47, 111, 104, 0.4);
 }
 
 .sentence-row span {
@@ -288,7 +291,7 @@
 }
 
 .sentence-row .s-index {
-  color: #94a3b8;
+  color: #7a8b94;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.7rem;
   font-weight: 700;
@@ -299,14 +302,14 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  color: #0369a1;
+  color: var(--accent-deep);
   margin-bottom: 0.85rem;
 }
 
 .back-link:hover {
-  color: #0c4a6e;
+  color: var(--accent);
 }
 
 .back-link svg {
@@ -322,5 +325,11 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
   }
 }
